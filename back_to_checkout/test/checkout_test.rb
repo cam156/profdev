@@ -13,25 +13,26 @@ class RegisterTest < Minitest::Test
   end
 
   def test_price
-    assert_equal(0, Register.new(self.RULES).checkout(''))
-    # assert_equal( 50,Register.new(self.RULES).checkout("A"))
-    # assert_equal( 80,Register.new(self.RULES).checkout("AB"))
-    # assert_equal(115,Register.new(self.RULES).checkout("CDBA"))
+    assert_equal(0, Register.new(self.RULES).checkout(""))
+    assert_equal( 50,Register.new(self.RULES).checkout("A"))
+    assert_equal( 80,Register.new(self.RULES).checkout("B"))
+    assert_equal( 80,Register.new(self.RULES).checkout("AA"))
+    assert_equal( 80,Register.new(self.RULES).checkout("AB"))
+    assert_equal(115,Register.new(self.RULES).checkout("CDBA"))
     #
-    # assert_equal(100,Register.new(self.RULES).checkout("AA"))
-    # assert_equal(130,Register.new(self.RULES).checkout("AAA"))
-    # assert_equal(180,Register.new(self.RULES).checkout("AAAA"))
-    # assert_equal(230,Register.new(self.RULES).checkout("AAAAA"))
-    # assert_equal(260,Register.new(self.RULES).checkout("AAAAAA"))
+    assert_equal(100,Register.new(self.RULES).checkout("AA"))
+    assert_equal(130,Register.new(self.RULES).checkout("AAA"))
+    assert_equal(180,Register.new(self.RULES).checkout("AAAA"))
+    assert_equal(230,Register.new(self.RULES).checkout("AAAAA"))
+    assert_equal(260,Register.new(self.RULES).checkout("AAAAAA"))
     #
-    # assert_equal(160,Register.new(self.RULES).checkout("AAAB"))
-    # assert_equal(175,Register.new(self.RULES).checkout("AAABB"))
-    # assert_equal(190,Register.new(self.RULES).checkout("AAABBD"))
-    # assert_equal(190,Register.new(self.RULES).checkout("DABABA"))
+    assert_equal(160,Register.new(self.RULES).checkout("AAAB"))
+    assert_equal(175,Register.new(self.RULES).checkout("AAABB"))
+    assert_equal(190,Register.new(self.RULES).checkout("AAABBD"))
+    assert_equal(190,Register.new(self.RULES).checkout("DABABA"))
   end
 
   def test_incremental
-    skip 'add scan and total methods'
     register = Register.new(self.RULES)
     assert_equal(0, register.total)
     register.scan('A');  assert_equal(50, register.total)
