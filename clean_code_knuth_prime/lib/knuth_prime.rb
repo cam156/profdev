@@ -1,3 +1,4 @@
+require 'byebug'
 
 class PrintPrimes
   NUMBER_OF_PRIME = 1000
@@ -13,34 +14,38 @@ class PrintPrimes
 
   def self.generate_prime_numbers
     prime_numbers = Array.new
-    mult = Array.new
+    prime_multiplier_array = Array.new(2)
 
-    j = 1
+    candidate_prime = 1
     prime_numbers[1] = 2
-    ord = 2
     square = 9
 
+    #byebug
     while (prime_numbers.count-1) < NUMBER_OF_PRIME do
       begin
-        j += 2
-        if j == square
-          ord = ord + 1
-          square = prime_numbers[ord] * prime_numbers[ord]
-          mult[ord - 1] = j
+        # skips even numbers
+        candidate_prime += 2
+
+        # Find our search limit
+        if candidate_prime == square
+          square = prime_numbers[prime_multiplier_array.size+1] ** 2
+          prime_multiplier_array << candidate_prime
         end
         n = 2
+
+        # Loop until you find a prime number
         jprime = true
-        while (n < ord) && jprime do
-          while (mult[n] < j) do
-            mult[n] = mult[n] + prime_numbers[n] + prime_numbers[n]
+        while (n < prime_multiplier_array.size) && jprime do
+          while (prime_multiplier_array[n] < candidate_prime) do
+            prime_multiplier_array[n] = prime_multiplier_array[n] + prime_numbers[n] + prime_numbers[n]
           end
-          if mult[n] == j
+          if prime_multiplier_array[n] == candidate_prime
             jprime = false
           end
           n += 1
         end
       end while (!jprime)
-      prime_numbers << j
+      prime_numbers << candidate_prime
     end
 
     prime_numbers
