@@ -22,29 +22,33 @@ class PrintPrimes
 
     #byebug
     while (prime_numbers.count-1) < NUMBER_OF_PRIME do
-      begin
+
+      candidate_is_prime = false
+      while (!candidate_is_prime)
         # skips even numbers
         candidate_prime += 2
 
         # Find our search limit
         if candidate_prime == square
-          square = prime_numbers[prime_multiplier_array.size+1] ** 2
           prime_multiplier_array << candidate_prime
+          square = prime_numbers[prime_multiplier_array.size] ** 2
         end
-        n = 2
 
         # Loop until you find a prime number
-        jprime = true
-        while (n < prime_multiplier_array.size) && jprime do
+        candidate_is_prime = true
+        n = 2
+        while (n < prime_multiplier_array.size) && candidate_is_prime do
           while (prime_multiplier_array[n] < candidate_prime) do
             prime_multiplier_array[n] = prime_multiplier_array[n] + prime_numbers[n] + prime_numbers[n]
           end
+
           if prime_multiplier_array[n] == candidate_prime
-            jprime = false
+            candidate_is_prime = false
           end
           n += 1
         end
-      end while (!jprime)
+      end
+
       prime_numbers << candidate_prime
     end
 
