@@ -16,12 +16,11 @@ class PrintPrimes
     mult = Array.new
 
     j = 1
-    k = 1
     prime_numbers[1] = 2
     ord = 2
     square = 9
 
-    while k < NUMBER_OF_PRIME do
+    while (prime_numbers.count-1) < NUMBER_OF_PRIME do
       begin
         j += 2
         if j == square
@@ -41,8 +40,7 @@ class PrintPrimes
           n += 1
         end
       end while (!jprime)
-      k += 1
-      prime_numbers[k] = j
+      prime_numbers << j
     end
 
     prime_numbers
