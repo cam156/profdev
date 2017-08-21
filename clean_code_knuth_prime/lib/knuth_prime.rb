@@ -14,30 +14,14 @@ class PrintPrimes
 
   def self.generate_prime_numbers
     prime_numbers = Array.new
-    multiples_of_found_primes = Array.new(1)
     @@prime_multiple_hash = {}
 
-
-    candidate_prime = 1
     prime_numbers[0] = 2
+    candidate_prime = 3
 
     while prime_numbers.count < NUMBER_OF_PRIME do
 
-      candidate_is_prime = false
-      while (!candidate_is_prime)
-        # skips even numbers
-        candidate_prime += 2
-
-        # Loop until you find a prime number
-        candidate_is_prime = true
-        n = 1
-        while (n < prime_numbers.size) && candidate_is_prime do
-          if is_multiple_of_prime?(candidate_prime, prime_numbers[n])
-            candidate_is_prime = false
-          end
-          n += 1
-        end
-      end
+      candidate_prime = find_next_prime(candidate_prime, prime_numbers)
 
       # the candidate is prime assign it to the list and add it
       # to the possible mutiples find in other numbers
@@ -73,6 +57,28 @@ class PrintPrimes
       pagenumber += 1
       pageoffset += (ROW_PER_PAGE * COLUMN_COUNT)
     end
+  end
+
+  def self.find_next_prime(candidate_prime, prime_numbers)
+    candidate_is_prime = false
+    while (!candidate_is_prime)
+      # check the next number skipping the even numbers
+      candidate_is_prime = candidate_is_prime?(candidate_prime, prime_numbers)
+      unless candidate_is_prime
+        candidate_prime += 2
+      end
+    end
+    candidate_prime
+  end
+
+  def self.candidate_is_prime?(candidate_prime, prime_numbers)
+    n = 1
+    candidate_is_prime = true
+    while (n < prime_numbers.size) && candidate_is_prime do
+      candidate_is_prime = !is_multiple_of_prime?(candidate_prime, prime_numbers[n])
+      n += 1
+    end
+    candidate_is_prime
   end
 
   def self.is_multiple_of_prime?(candidate_prime, prime_number)
