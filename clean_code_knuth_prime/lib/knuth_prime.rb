@@ -14,48 +14,45 @@ class PrintPrimes
 
   def self.generate_prime_numbers
     prime_numbers = Array.new
-    prime_multiplier_array = Array.new(2)
+    multiples_of_found_primes = Array.new(1)
 
     candidate_prime = 1
-    prime_numbers[1] = 2
-    square = 9
+    prime_numbers[0] = 2
 
     #byebug
-    while (prime_numbers.count-1) < NUMBER_OF_PRIME do
+    while (prime_numbers.count) < NUMBER_OF_PRIME do
 
       candidate_is_prime = false
       while (!candidate_is_prime)
         # skips even numbers
         candidate_prime += 2
 
-        # Find our search limit
-        if candidate_prime == square
-          prime_multiplier_array << candidate_prime
-          square = prime_numbers[prime_multiplier_array.size] ** 2
-        end
-
         # Loop until you find a prime number
         candidate_is_prime = true
-        n = 2
-        while (n < prime_multiplier_array.size) && candidate_is_prime do
-          while (prime_multiplier_array[n] < candidate_prime) do
-            prime_multiplier_array[n] = prime_multiplier_array[n] + prime_numbers[n] + prime_numbers[n]
-          end
+        n = 1
+        while (n < multiples_of_found_primes.size) && candidate_is_prime do
+          multiples_of_found_primes[n] = advance_prime_multiple(candidate_prime, prime_numbers[n], multiples_of_found_primes[n])
 
-          if prime_multiplier_array[n] == candidate_prime
+          # candidate matches a multiple of another prime exactly
+          #  Then it can not be a prime number
+          if multiples_of_found_primes[n] == candidate_prime
             candidate_is_prime = false
           end
           n += 1
         end
       end
 
+      # the candidate is prime assign it to the list and add it
+      # to the possible mutiples find in other numbers
       prime_numbers << candidate_prime
+      multiples_of_found_primes << candidate_prime
     end
 
     prime_numbers
   end
 
   def self.output_prime_number_table(prime_numbers)
+    prime_numbers.unshift(nil)
     pagenumber = 1
     pageoffset = 1
     while pageoffset <= NUMBER_OF_PRIME do
@@ -79,5 +76,13 @@ class PrintPrimes
       pagenumber += 1
       pageoffset += (ROW_PER_PAGE * COLUMN_COUNT)
     end
+  end
+
+  def self.advance_prime_multiple( candidate_prime, prime_number, current_prime_multiple)
+    while (current_prime_multiple < candidate_prime) do
+      # we can advance the number by twice it's value since we are not checking for mutiples of two
+      current_prime_multiple += (2*prime_number)
+    end
+    current_prime_multiple
   end
 end

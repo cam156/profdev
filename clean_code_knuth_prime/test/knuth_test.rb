@@ -270,6 +270,6 @@ the first 1000 prime numbers --- page 5\n\
   end
 
   def test_primes
-    assert_equal PrintPrimes.generate_prime_numbers.slice(1,1000), Prime.first(1000)
+    assert_equal PrintPrimes.generate_prime_numbers, Prime.first(1000)
   end
 end
