@@ -15,12 +15,13 @@ class PrintPrimes
   def self.generate_prime_numbers
     prime_numbers = Array.new
     multiples_of_found_primes = Array.new(1)
+    @@prime_multiple_hash = {}
+
 
     candidate_prime = 1
     prime_numbers[0] = 2
 
-    #byebug
-    while (prime_numbers.count) < NUMBER_OF_PRIME do
+    while prime_numbers.count < NUMBER_OF_PRIME do
 
       candidate_is_prime = false
       while (!candidate_is_prime)
@@ -30,12 +31,8 @@ class PrintPrimes
         # Loop until you find a prime number
         candidate_is_prime = true
         n = 1
-        while (n < multiples_of_found_primes.size) && candidate_is_prime do
-          multiples_of_found_primes[n] = advance_prime_multiple(candidate_prime, prime_numbers[n], multiples_of_found_primes[n])
-
-          # candidate matches a multiple of another prime exactly
-          #  Then it can not be a prime number
-          if multiples_of_found_primes[n] == candidate_prime
+        while (n < prime_numbers.size) && candidate_is_prime do
+          if is_multiple_of_prime?(candidate_prime, prime_numbers[n])
             candidate_is_prime = false
           end
           n += 1
@@ -45,7 +42,7 @@ class PrintPrimes
       # the candidate is prime assign it to the list and add it
       # to the possible mutiples find in other numbers
       prime_numbers << candidate_prime
-      multiples_of_found_primes << candidate_prime
+      @@prime_multiple_hash[candidate_prime] = candidate_prime
     end
 
     prime_numbers
@@ -78,11 +75,19 @@ class PrintPrimes
     end
   end
 
-  def self.advance_prime_multiple( candidate_prime, prime_number, current_prime_multiple)
+  def self.is_multiple_of_prime?(candidate_prime, prime_number)
+    prime_multiple = advance_prime_multiple(candidate_prime, prime_number)
+
+    prime_multiple == candidate_prime
+  end
+
+  def self.advance_prime_multiple( candidate_prime, prime_number)
+    current_prime_multiple = @@prime_multiple_hash[prime_number]
     while (current_prime_multiple < candidate_prime) do
       # we can advance the number by twice it's value since we are not checking for mutiples of two
       current_prime_multiple += (2*prime_number)
     end
+    @@prime_multiple_hash[prime_number] = current_prime_multiple
     current_prime_multiple
   end
 end
