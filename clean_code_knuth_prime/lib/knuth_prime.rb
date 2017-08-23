@@ -4,6 +4,7 @@ class PrintPrimes
   NUMBER_OF_PRIME = 1000
   ROW_PER_PAGE = 50
   COLUMN_COUNT = 4
+  INITIAL_PRIME = 2
 
   def self.main(*args)
     prime_numbers = generate_prime_numbers
@@ -13,11 +14,9 @@ class PrintPrimes
 
 
   def self.generate_prime_numbers
-    prime_numbers = Array.new
+    prime_numbers = [INITIAL_PRIME]
     @@prime_multiple_hash = {}
-
-    prime_numbers[0] = 2
-    candidate_prime = 3
+    candidate_prime = INITIAL_PRIME+1
 
     while prime_numbers.count < NUMBER_OF_PRIME do
 
@@ -62,9 +61,9 @@ class PrintPrimes
   def self.find_next_prime(candidate_prime, prime_numbers)
     candidate_is_prime = false
     while (!candidate_is_prime)
-      # check the next number skipping the even numbers
       candidate_is_prime = candidate_is_prime?(candidate_prime, prime_numbers)
       unless candidate_is_prime
+        # check the next number skipping the even numbers
         candidate_prime += 2
       end
     end
@@ -82,18 +81,14 @@ class PrintPrimes
   end
 
   def self.is_multiple_of_prime?(candidate_prime, prime_number)
-    prime_multiple = advance_prime_multiple(candidate_prime, prime_number)
-
-    prime_multiple == candidate_prime
+    candidate_prime == advance_prime_multiple(candidate_prime, prime_number)
   end
 
   def self.advance_prime_multiple( candidate_prime, prime_number)
-    current_prime_multiple = @@prime_multiple_hash[prime_number]
-    while (current_prime_multiple < candidate_prime) do
+    while (@@prime_multiple_hash[prime_number] < candidate_prime) do
       # we can advance the number by twice it's value since we are not checking for mutiples of two
-      current_prime_multiple += (2*prime_number)
+      @@prime_multiple_hash[prime_number] += (2*prime_number)
     end
-    @@prime_multiple_hash[prime_number] = current_prime_multiple
-    current_prime_multiple
+    @@prime_multiple_hash[prime_number]
   end
 end
