@@ -20,7 +20,7 @@ class PrintPrimes
 
     while prime_numbers.count < NUMBER_OF_PRIME do
 
-      candidate_prime = find_next_prime(candidate_prime, prime_numbers)
+      candidate_prime = find_next_prime(candidate_prime, prime_numbers[1..-1])
 
       # the candidate is prime assign it to the list and add it
       # to the possible mutiples find in other numbers
@@ -58,11 +58,12 @@ class PrintPrimes
     end
   end
 
-  def self.find_next_prime(candidate_prime, prime_numbers)
-    candidate_is_prime = false
-    while (!candidate_is_prime)
-      candidate_is_prime = candidate_is_prime?(candidate_prime, prime_numbers)
-      unless candidate_is_prime
+  def self.find_next_prime(candidate_prime, prime_numbers_after_2)
+    candidate_is_not_prime = true
+    while (candidate_is_not_prime)
+      if candidate_is_prime?(candidate_prime, prime_numbers_after_2)
+        candidate_is_not_prime = false
+      else
         # check the next number skipping the even numbers
         candidate_prime += 2
       end
@@ -70,12 +71,16 @@ class PrintPrimes
     candidate_prime
   end
 
-  def self.candidate_is_prime?(candidate_prime, prime_numbers)
-    n = 1
+  def self.candidate_is_prime?(candidate_prime, prime_numbers_after_2)
+    # assume the candidate is prime until we discover a multiple or another prime we already found
     candidate_is_prime = true
-    while (n < prime_numbers.size) && candidate_is_prime do
-      candidate_is_prime = !is_multiple_of_prime?(candidate_prime, prime_numbers[n])
-      n += 1
+
+    # loop through primes we have already found and determine if any of those numbers are a multiple of the canidate
+    prime_numbers_after_2.each do |current_prime|
+      candidate_is_prime = !is_multiple_of_prime?(candidate_prime, current_prime)
+      unless candidate_is_prime
+        break
+      end
     end
     candidate_is_prime
   end
