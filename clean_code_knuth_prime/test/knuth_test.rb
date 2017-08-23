@@ -3,10 +3,8 @@ require 'minitest/autorun'
 require 'prime'
 require_relative '../lib/knuth_prime'
 
-
 class KnuthTest < Minitest::Test
-
-  PRIMES= "the first 1000 prime numbers --- page 1\n\
+  PRIMES = "the first 1000 prime numbers --- page 1\n\
 2, 233, 547, 877\n\
 3, 239, 557, 881\n\
 5, 241, 563, 883\n\
@@ -260,7 +258,7 @@ the first 1000 prime numbers --- page 5\n\
 6553, 6977, 7481, 7883\n\
 6563, 6983, 7487, 7901\n\
 6569, 6991, 7489, 7907\n\
-6571, 6997, 7499, 7919\n"
+6571, 6997, 7499, 7919\n".freeze
 
   def test_output
     out, err = capture_io do
