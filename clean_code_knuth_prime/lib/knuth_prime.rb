@@ -60,39 +60,28 @@ class PrintPrimes
   end
 
   def self.find_next_prime(candidate_prime, prime_numbers_found_after_two)
-    candidate_is_not_prime = true
-    while candidate_is_not_prime
-      if candidate_is_prime?(candidate_prime, prime_numbers_found_after_two)
-        candidate_is_not_prime = false
-      else
-        candidate_prime = next_candidate(candidate_prime)
-      end
+    until candidate_is_prime?(candidate_prime, prime_numbers_found_after_two)
+      candidate_prime = next_candidate(candidate_prime)
     end
+
+    # since we exited the loop candidate prime is an actual prime number
     @prime_multiple_hash[candidate_prime] = candidate_prime
-    candidate_prime
   end
 
   def self.candidate_is_prime?(candidate_prime, prime_numbers_found_after_two)
-    # assume the candidate is prime
-    #  until we discover a multiple of another prime we already found
-    candidate_is_prime = true
-
-    prime_numbers_found_after_two.each do |current_prime|
-      candidate_is_prime = !multiple_of_prime?(candidate_prime, current_prime)
-      break unless candidate_is_prime
+    prime_numbers_found_after_two.all? do |current_prime|
+      not_multiple_of_prime?(candidate_prime, current_prime)
     end
-
-    candidate_is_prime
   end
 
-  def self.multiple_of_prime?(candidate_prime, prime_number)
-    candidate_prime == advance_prime_multiple(candidate_prime, prime_number)
+  def self.not_multiple_of_prime?(candidate_prime, prime_number)
+    candidate_prime != advance_prime_multiple(candidate_prime, prime_number)
   end
 
   def self.advance_prime_multiple(candidate_prime, prime_number)
     while @prime_multiple_hash[prime_number] < candidate_prime
       # we can advance the number by twice it's value
-      #   since we are not checking for mutiples of two
+      #   since we are not checking for multiples of two
       @prime_multiple_hash[prime_number] += (2 * prime_number)
     end
     @prime_multiple_hash[prime_number]
